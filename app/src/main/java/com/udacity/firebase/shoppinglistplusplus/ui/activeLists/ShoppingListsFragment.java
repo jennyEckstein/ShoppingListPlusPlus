@@ -3,13 +3,19 @@ package com.udacity.firebase.shoppinglistplusplus.ui.activeLists;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.udacity.firebase.shoppinglistplusplus.R;
+import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
 
 
 /**
@@ -18,6 +24,8 @@ import com.udacity.firebase.shoppinglistplusplus.R;
  * create an instance of this fragment.
  */
 public class ShoppingListsFragment extends Fragment {
+
+    public static final String LOG_TAG = ShoppingListsFragment.class.getSimpleName();
     private ListView mListView;
 
     public ShoppingListsFragment() {
@@ -59,6 +67,19 @@ public class ShoppingListsFragment extends Fragment {
          */
         View rootView = inflater.inflate(R.layout.fragment_shopping_lists, container, false);
         initializeScreen(rootView);
+
+        Firebase listNameRef = new Firebase(Constants.FIREBASE_URL).child("listName");
+        listNameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e(LOG_TAG, "The data changed");
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
         /**
          * Set interactive bits, such as click events and adapters
