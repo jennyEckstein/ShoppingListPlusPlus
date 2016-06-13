@@ -3,12 +3,12 @@ package com.udacity.firebase.shoppinglistplusplus.ui.activeLists;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -27,6 +27,7 @@ public class ShoppingListsFragment extends Fragment {
 
     public static final String LOG_TAG = ShoppingListsFragment.class.getSimpleName();
     private ListView mListView;
+    private TextView mTextViewListName;
 
     public ShoppingListsFragment() {
         /* Required empty public constructor */
@@ -72,7 +73,9 @@ public class ShoppingListsFragment extends Fragment {
         listNameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(LOG_TAG, "The data changed");
+                //Log.e(LOG_TAG, "The data changed");
+                String listName = (String) dataSnapshot.getValue();
+                mTextViewListName.setText(listName);
             }
 
             @Override
@@ -105,5 +108,6 @@ public class ShoppingListsFragment extends Fragment {
      */
     private void initializeScreen(View rootView) {
         mListView = (ListView) rootView.findViewById(R.id.list_view_active_lists);
+        mTextViewListName = (TextView) rootView.findViewById(R.id.text_view_list_name);
     }
 }
