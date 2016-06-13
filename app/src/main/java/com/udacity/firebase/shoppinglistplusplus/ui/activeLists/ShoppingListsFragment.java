@@ -17,6 +17,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.udacity.firebase.shoppinglistplusplus.R;
+import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
 import com.udacity.firebase.shoppinglistplusplus.ui.activeListDetails.ActiveListDetailsActivity;
 import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
 
@@ -31,6 +32,7 @@ public class ShoppingListsFragment extends Fragment {
     public static final String LOG_TAG = ShoppingListsFragment.class.getSimpleName();
     private ListView mListView;
     private TextView mTextViewListName;
+    private TextView mTextViewOwner;
 
     public ShoppingListsFragment() {
         /* Required empty public constructor */
@@ -78,8 +80,13 @@ public class ShoppingListsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Log.e(LOG_TAG, "The data changed");
-                String listName = (String) dataSnapshot.getValue();
-                mTextViewListName.setText(listName);
+                if(dataSnapshot != null) {
+                    ShoppingList listName = dataSnapshot.getValue(ShoppingList.class);
+                    mTextViewListName.setText(listName.getListName());
+                    mTextViewOwner.setText(listName.getOwner());
+                }else{
+                    Log.v(LOG_TAG, "NO DATA");
+                }
             }
 
             @Override
@@ -113,6 +120,7 @@ public class ShoppingListsFragment extends Fragment {
     private void initializeScreen(View rootView) {
         mListView = (ListView) rootView.findViewById(R.id.list_view_active_lists);
         mTextViewListName = (TextView) rootView.findViewById(R.id.text_view_list_name);
+        mTextViewOwner = (TextView) rootView.findViewById(R.id.text_view_created_by_user);
 
         mTextViewListName.setOnClickListener(new View.OnClickListener(){
             @Override
