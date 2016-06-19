@@ -20,6 +20,7 @@ import com.udacity.firebase.shoppinglistplusplus.R;
 import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
 import com.udacity.firebase.shoppinglistplusplus.ui.activeListDetails.ActiveListDetailsActivity;
 import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
+import com.udacity.firebase.shoppinglistplusplus.utils.Utils;
 
 
 /**
@@ -30,9 +31,10 @@ import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
 public class ShoppingListsFragment extends Fragment {
 
     public static final String LOG_TAG = ShoppingListsFragment.class.getSimpleName();
-    private ListView mListView;
-    private TextView mTextViewListName;
-    private TextView mTextViewOwner;
+    ListView mListView;
+    TextView mTextViewListName;
+    TextView mTextViewOwner;
+    TextView mTextViewEditTime;
 
     public ShoppingListsFragment() {
         /* Required empty public constructor */
@@ -82,8 +84,11 @@ public class ShoppingListsFragment extends Fragment {
                 //Log.e(LOG_TAG, "The data changed");
                 if(dataSnapshot != null) {
                     ShoppingList listName = dataSnapshot.getValue(ShoppingList.class);
-                    mTextViewListName.setText(listName.getListName());
-                    mTextViewOwner.setText(listName.getOwner());
+                    if(listName != null) {
+                        mTextViewListName.setText(listName.getListName());
+                        mTextViewOwner.setText(listName.getOwner());
+                        mTextViewEditTime.setText(Utils.formatDate(listName.getTimestampLastChangedLong()));
+                    }
                 }else{
                     Log.v(LOG_TAG, "NO DATA");
                 }
@@ -121,6 +126,7 @@ public class ShoppingListsFragment extends Fragment {
         mListView = (ListView) rootView.findViewById(R.id.list_view_active_lists);
         mTextViewListName = (TextView) rootView.findViewById(R.id.text_view_list_name);
         mTextViewOwner = (TextView) rootView.findViewById(R.id.text_view_created_by_user);
+        mTextViewEditTime = (TextView) rootView.findViewById(R.id.text_view_edit_time);
 
         mTextViewListName.setOnClickListener(new View.OnClickListener(){
             @Override

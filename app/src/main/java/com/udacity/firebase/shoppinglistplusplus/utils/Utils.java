@@ -11,7 +11,7 @@ public class Utils {
     /**
      * Format the date with SimpleDateFormat
      */
-    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy h:mm a");
     private Context mContext = null;
 
 
@@ -21,5 +21,10 @@ public class Utils {
     public Utils(Context con) {
         mContext = con;
     }
+
+    public static String formatDate(long time){
+        return SIMPLE_DATE_FORMAT.format(time);
+    }
+
 
 }
