@@ -4,6 +4,7 @@
     == Base Strings For the App ==
 
      -->
+
     <string name="app_name">ShoppingList++</string>
     <string name="pager_title_shopping_lists">Shopping Lists</string>
     <string name="pager_title_meals">Meals</string>
