@@ -14,9 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.ServerValue;
 import com.udacity.firebase.shoppinglistplusplus.R;
 import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
 import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
+
+import java.util.HashMap;
 
 /**
  * Adds a new shopping list
@@ -93,10 +96,27 @@ public class AddListDialogFragment extends DialogFragment {
      * Add new active list
      */
     public void addShoppingList() {
-        Firebase ref = new Firebase(Constants.FIREBASE_URL);
+        /*Firebase ref = new Firebase(Constants.FIREBASE_URL);
         String userEnteredName = mEditTextListName.getText().toString();
         ShoppingList shoppingList = new ShoppingList(userEnteredName, "Anonymous Owner");
-        ref.child(Constants.FIREBASE_LOCATION_ACTIVE_LIST).setValue(shoppingList);
+        ref.child(Constants.FIREBASE_LOCATION_ACTIVE_LIST).setValue(shoppingList);*/
+
+        String userEnteredName = mEditTextListName.getText().toString();
+        String owner = "Anonymous Ownew";
+
+        if(!userEnteredName.equals("")){
+            Firebase listsRef = new Firebase(Constants.FIREBASE_URL_ACTIVE_LISTS);
+            Firebase newListRef = listsRef.push();
+
+            final String listId = newListRef.getKey();
+
+            HashMap<String, Object> timestampCreated = new HashMap<>();
+            timestampCreated.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+
+            ShoppingList newShoppingList = new ShoppingList(userEnteredName, owner, timestampCreated);
+            newListRef.setValue(newShoppingList);
+            AddListDialogFragment.this.getDialog().cancel();
+        }
     }
 
 }
