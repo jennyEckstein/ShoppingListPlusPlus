@@ -1,26 +1,18 @@
 package com.udacity.firebase.shoppinglistplusplus.ui.activeLists;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.udacity.firebase.shoppinglistplusplus.R;
 import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
-import com.udacity.firebase.shoppinglistplusplus.ui.activeListDetails.ActiveListDetailsActivity;
 import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
-import com.udacity.firebase.shoppinglistplusplus.utils.Utils;
 
 
 /**
@@ -35,6 +27,7 @@ public class ShoppingListsFragment extends Fragment {
     TextView mTextViewListName;
     TextView mTextViewOwner;
     TextView mTextViewEditTime;
+    ActiveListAdapter mActiveListAdapter;
 
     public ShoppingListsFragment() {
         /* Required empty public constructor */
@@ -49,12 +42,6 @@ public class ShoppingListsFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-    }
-    
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     /**
@@ -76,9 +63,12 @@ public class ShoppingListsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_shopping_lists, container, false);
         initializeScreen(rootView);
 
-        Firebase listNameRef = new Firebase(Constants.FIREBASE_URL).child(Constants.FIREBASE_LOCATION_ACTIVE_LIST);
+      //  Firebase listNameRef = new Firebase(Constants.FIREBASE_URL).child(Constants.FIREBASE_LOCATION_ACTIVE_LIST);
+        Firebase activeListsRef = new Firebase(Constants.FIREBASE_URL_ACTIVE_LISTS);
+        mActiveListAdapter = new ActiveListAdapter(getActivity(), ShoppingList.class,
+                R.layout.single_active_list, activeListsRef);
 
-        listNameRef.addValueEventListener(new ValueEventListener() {
+        /*listNameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Log.e(LOG_TAG, "The data changed");
@@ -98,18 +88,19 @@ public class ShoppingListsFragment extends Fragment {
             public void onCancelled(FirebaseError firebaseError) {
                 Log.e(LOG_TAG, "CANCELLED");
             }
-        });
+        });*/
 
         /**
          * Set interactive bits, such as click events and adapters
          */
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      /*  mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
         });
-
+*/
+        mListView.setAdapter(mActiveListAdapter);
         return rootView;
     }
 
@@ -118,12 +109,19 @@ public class ShoppingListsFragment extends Fragment {
         super.onDestroy();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mActiveListAdapter.cleanup();
+    }
 
     /**
      * Link layout elements from XML
      */
     private void initializeScreen(View rootView) {
         mListView = (ListView) rootView.findViewById(R.id.list_view_active_lists);
+
+     /*   mListView = (ListView) rootView.findViewById(R.id.list_view_active_lists);
         mTextViewListName = (TextView) rootView.findViewById(R.id.text_view_list_name);
         mTextViewOwner = (TextView) rootView.findViewById(R.id.text_view_created_by_user);
         mTextViewEditTime = (TextView) rootView.findViewById(R.id.text_view_edit_time);
@@ -135,6 +133,6 @@ public class ShoppingListsFragment extends Fragment {
                 startActivity(intent);
                 Log.v(LOG_TAG, "clicked list");
             }
-        });
+        });*/
     }
 }
