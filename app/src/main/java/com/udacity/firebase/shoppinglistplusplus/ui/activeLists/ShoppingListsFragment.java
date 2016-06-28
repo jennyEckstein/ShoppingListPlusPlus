@@ -1,17 +1,20 @@
 package com.udacity.firebase.shoppinglistplusplus.ui.activeLists;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 import com.udacity.firebase.shoppinglistplusplus.R;
 import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
+import com.udacity.firebase.shoppinglistplusplus.ui.activeListDetails.ActiveListDetailsActivity;
 import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
 
 
@@ -55,7 +58,7 @@ public class ShoppingListsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         /**
          * Initalize UI elements
@@ -64,7 +67,7 @@ public class ShoppingListsFragment extends Fragment {
         initializeScreen(rootView);
 
       //  Firebase listNameRef = new Firebase(Constants.FIREBASE_URL).child(Constants.FIREBASE_LOCATION_ACTIVE_LIST);
-        Firebase activeListsRef = new Firebase(Constants.FIREBASE_URL_ACTIVE_LISTS);
+        final Firebase activeListsRef = new Firebase(Constants.FIREBASE_URL_ACTIVE_LISTS);
         mActiveListAdapter = new ActiveListAdapter(getActivity(), ShoppingList.class,
                 R.layout.single_active_list, activeListsRef);
 
@@ -93,13 +96,20 @@ public class ShoppingListsFragment extends Fragment {
         /**
          * Set interactive bits, such as click events and adapters
          */
-      /*  mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                ShoppingList selectedList = mActiveListAdapter.getItem(position);
+                if(selectedList != null){
+                    Intent intent = new Intent(getActivity(), ActiveListDetailsActivity.class);
+                    String listId = mActiveListAdapter.getRef(position).getKey();
+                    intent.putExtra(Constants.KEY_LIST_ID, listId);
+                    startActivity(intent);
+                }
             }
         });
-*/
+
         mListView.setAdapter(mActiveListAdapter);
         return rootView;
     }
