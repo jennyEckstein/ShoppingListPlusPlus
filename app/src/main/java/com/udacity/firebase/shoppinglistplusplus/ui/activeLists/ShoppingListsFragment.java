@@ -71,28 +71,6 @@ public class ShoppingListsFragment extends Fragment {
         mActiveListAdapter = new ActiveListAdapter(getActivity(), ShoppingList.class,
                 R.layout.single_active_list, activeListsRef);
 
-        /*listNameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //Log.e(LOG_TAG, "The data changed");
-                if(dataSnapshot != null) {
-                    ShoppingList listName = dataSnapshot.getValue(ShoppingList.class);
-                    if(listName != null) {
-                        mTextViewListName.setText(listName.getListName());
-                        mTextViewOwner.setText(listName.getOwner());
-                        mTextViewEditTime.setText(Utils.formatDate(listName.getTimestampLastChangedLong()));
-                    }
-                }else{
-                    Log.v(LOG_TAG, "NO DATA");
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.e(LOG_TAG, "CANCELLED");
-            }
-        });*/
-
         /**
          * Set interactive bits, such as click events and adapters
          */
@@ -130,19 +108,5 @@ public class ShoppingListsFragment extends Fragment {
      */
     private void initializeScreen(View rootView) {
         mListView = (ListView) rootView.findViewById(R.id.list_view_active_lists);
-
-     /*   mListView = (ListView) rootView.findViewById(R.id.list_view_active_lists);
-        mTextViewListName = (TextView) rootView.findViewById(R.id.text_view_list_name);
-        mTextViewOwner = (TextView) rootView.findViewById(R.id.text_view_created_by_user);
-        mTextViewEditTime = (TextView) rootView.findViewById(R.id.text_view_edit_time);
-
-        mTextViewListName.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ActiveListDetailsActivity.class);
-                startActivity(intent);
-                Log.v(LOG_TAG, "clicked list");
-            }
-        });*/
     }
 }
