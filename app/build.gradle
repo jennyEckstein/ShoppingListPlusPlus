@@ -11,13 +11,14 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes.each{
         it.buildConfigField 'String','UNIQUE_FIREBASE_ROOT_URL', UniqueFirebaseRootUrl
     }
     /*
     * We get an error about duplicate files, and to avoid that
     * we need to add packaging options. So lets exclude this duplicated
-    * files
+    * files.
     * */
     packagingOptions{
         exclude 'META-INF/LICENSE'
