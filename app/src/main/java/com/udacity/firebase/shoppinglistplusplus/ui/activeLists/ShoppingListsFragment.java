@@ -70,6 +70,8 @@ public class ShoppingListsFragment extends Fragment {
         final Firebase activeListsRef = new Firebase(Constants.FIREBASE_URL_ACTIVE_LISTS);
         mActiveListAdapter = new ActiveListAdapter(getActivity(), ShoppingList.class,
                 R.layout.single_active_list, activeListsRef);
+        mListView.setAdapter(mActiveListAdapter);
+
 
         /**
          * Set interactive bits, such as click events and adapters
@@ -88,7 +90,7 @@ public class ShoppingListsFragment extends Fragment {
             }
         });
 
-        mListView.setAdapter(mActiveListAdapter);
+
         return rootView;
     }
 

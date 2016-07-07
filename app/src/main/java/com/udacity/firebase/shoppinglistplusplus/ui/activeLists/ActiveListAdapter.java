@@ -1,6 +1,7 @@
 package com.udacity.firebase.shoppinglistplusplus.ui.activeLists;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,6 +15,8 @@ import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
  */
 public class ActiveListAdapter extends FirebaseListAdapter<ShoppingList>{
 
+    private static final String LOG_TAG = ActiveListAdapter.class.getSimpleName();
+
     public ActiveListAdapter(Activity activity, Class<ShoppingList> modelClass, int modelLayout, Query ref){
         super(activity, modelClass, modelLayout, ref);
         this.mActivity = activity;
@@ -21,10 +24,10 @@ public class ActiveListAdapter extends FirebaseListAdapter<ShoppingList>{
 
     @Override
     protected void populateView(View v, ShoppingList model) {
-
+        Log.v(LOG_TAG, "populating view");
         TextView textViewListName = (TextView) v.findViewById(R.id.text_view_list_name);
         TextView textViewCreatedByUser = (TextView) v.findViewById(R.id.text_view_created_by_user);
-
+        Log.v(LOG_TAG, model.getListName());
         textViewListName.setText(model.getListName());
         textViewCreatedByUser.setText(model.getOwner());
     }
