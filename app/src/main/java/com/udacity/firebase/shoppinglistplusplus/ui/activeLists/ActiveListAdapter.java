@@ -24,10 +24,8 @@ public class ActiveListAdapter extends FirebaseListAdapter<ShoppingList>{
 
     @Override
     protected void populateView(View v, ShoppingList model) {
-        Log.v(LOG_TAG, "populating view");
         TextView textViewListName = (TextView) v.findViewById(R.id.text_view_list_name);
         TextView textViewCreatedByUser = (TextView) v.findViewById(R.id.text_view_created_by_user);
-        Log.v(LOG_TAG, model.getListName());
         textViewListName.setText(model.getListName());
         textViewCreatedByUser.setText(model.getOwner());
     }
