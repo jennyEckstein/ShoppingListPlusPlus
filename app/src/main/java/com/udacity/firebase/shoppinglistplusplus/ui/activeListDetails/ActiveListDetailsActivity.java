@@ -43,10 +43,12 @@ public class ActiveListDetailsActivity extends BaseActivity {
         }
 
         this.mActiveListRef = new Firebase(Constants.FIREBASE_URL_ACTIVE_LISTS).child(mListId);
+        //Firebase listItemsRef = new Firebase(Constants.FIREBASE_URL_SHOPPING_LIST_ITEMS);
         /**
          * Link layout elements from XML and setup the toolbar
          */
         initializeScreen();
+
 
             Log.v(LOG_TAG, "B4 listener");
         mActiveListRef.addValueEventListener(new ValueEventListener(){

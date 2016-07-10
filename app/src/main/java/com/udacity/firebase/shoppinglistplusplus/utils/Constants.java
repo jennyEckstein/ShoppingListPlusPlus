@@ -13,6 +13,7 @@ public final class Constants {
      */
   //public static final String FIREBASE_LOCATION_ACTIVE_LIST = "activeList";
     public static final String FIREBASE_LOCATION_ACTIVE_LISTS = "activeLists";
+    public static final String FIREBASE_LOCATION_SHOPPING_LIST_ITEMS = "shoppingListItems";
 
     /**
      * Constants for Firebase object properties
@@ -27,6 +28,7 @@ public final class Constants {
     public static final String FIREBASE_URL = BuildConfig.UNIQUE_FIREBASE_ROOT_URL; //build.gradle and gradle.properties
     //public static final String FIREBASE_URL_ACTIVE_LIST = FIREBASE_URL + "/" + FIREBASE_LOCATION_ACTIVE_LIST;
     public static final String FIREBASE_URL_ACTIVE_LISTS = FIREBASE_URL + "/" + FIREBASE_LOCATION_ACTIVE_LISTS;
+    public static final String FIREBASE_URL_SHOPPING_LIST_ITEMS = FIREBASE_URL + "/" + FIREBASE_LOCATION_SHOPPING_LIST_ITEMS;
     /**
      * Constants for bundles, extras and shared preferences keys
      */
