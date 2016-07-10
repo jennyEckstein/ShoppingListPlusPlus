@@ -1,21 +1,18 @@
 package com.udacity.firebase.shoppinglistplusplus.ui.activeListDetails;
 
+
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.udacity.firebase.shoppinglistplusplus.R;
+import com.udacity.firebase.shoppinglistplusplus.model.Item;
 import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
 import com.udacity.firebase.shoppinglistplusplus.ui.BaseActivity;
 import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
@@ -25,10 +22,11 @@ import com.udacity.firebase.shoppinglistplusplus.utils.Constants;
  */
 public class ActiveListDetailsActivity extends BaseActivity {
     private static final String LOG_TAG = ActiveListDetailsActivity.class.getSimpleName();
-    private ListView mListView;
-    private ShoppingList mShoppingList;
     private Firebase mActiveListRef;
+    private ActiveListItemAdapter mActiveListItemAdapter;
+    private ListView mListView;
     private String mListId;
+    private ShoppingList mShoppingList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -37,58 +35,22 @@ public class ActiveListDetailsActivity extends BaseActivity {
 
         Intent intent = this.getIntent();
         mListId = intent.getStringExtra(Constants.KEY_LIST_ID);
-        if(mListId == null){
+        if (mListId == null) {
             finish();
             return;
         }
 
         this.mActiveListRef = new Firebase(Constants.FIREBASE_URL_ACTIVE_LISTS).child(mListId);
-        //Firebase listItemsRef = new Firebase(Constants.FIREBASE_URL_SHOPPING_LIST_ITEMS);
+        Firebase listItemsRef = new Firebase(Constants.FIREBASE_URL_SHOPPING_LIST_ITEMS).child(mListId);
         /**
          * Link layout elements from XML and setup the toolbar
          */
         initializeScreen();
 
-
-            Log.v(LOG_TAG, "B4 listener");
-        mActiveListRef.addValueEventListener(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ShoppingList shoppingList = dataSnapshot.getValue(ShoppingList.class);
-                if(shoppingList == null){
-                    finish();
-                    return;
-                }
-                mShoppingList = shoppingList;
-
-                invalidateOptionsMenu();
-                setTitle(shoppingList.getListName());
-                Log.v(LOG_TAG, "on Data CHnaged " + shoppingList.getListName());
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.e(LOG_TAG, getString(R.string.log_error_the_read_failed) + firebaseError.getMessage());
-            }
-        });
-
-
-        /**
-         * Set up click listeners for interaction.
-         */
-
-        /* Show edit list item name dialog on listView item long click event */
-        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                /* Check that the view is not the empty footer item */
-                if(view.getId() != R.id.list_view_footer_empty) {
-                    showEditListItemNameDialog();
-                }
-                return true;
-            }
-        });
+        mActiveListItemAdapter = new ActiveListItemAdapter(this, Item.class,
+                R.layout.single_active_list_item, listItemsRef);
+               /* Create ActiveListItemAdapter and set to listView */
+        mListView.setAdapter(mActiveListItemAdapter);
     }
 
     @Override
