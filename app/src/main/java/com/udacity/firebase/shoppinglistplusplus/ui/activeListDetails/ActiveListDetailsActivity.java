@@ -5,12 +5,16 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.udacity.firebase.shoppinglistplusplus.R;
 import com.udacity.firebase.shoppinglistplusplus.model.Item;
 import com.udacity.firebase.shoppinglistplusplus.model.ShoppingList;
@@ -27,11 +31,14 @@ public class ActiveListDetailsActivity extends BaseActivity {
     private ListView mListView;
     private String mListId;
     private ShoppingList mShoppingList;
+    private ValueEventListener mActiveListRefListener;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_list_details);
+
+
 
         Intent intent = this.getIntent();
         mListId = intent.getStringExtra(Constants.KEY_LIST_ID);
@@ -51,7 +58,28 @@ public class ActiveListDetailsActivity extends BaseActivity {
                 R.layout.single_active_list_item, listItemsRef);
                /* Create ActiveListItemAdapter and set to listView */
         mListView.setAdapter(mActiveListItemAdapter);
+
+        mActiveListRefListener = mActiveListRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ShoppingList shoppingList = dataSnapshot.getValue(ShoppingList.class);
+                if (shoppingList == null){
+                    finish();
+                    return;
+                }
+                mShoppingList = shoppingList;
+                invalidateOptionsMenu();
+                setTitle(shoppingList.getListName());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.e(LOG_TAG, getString(R.string.log_error_the_read_failed) + firebaseError.getMessage());
+            }
+        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,6 +148,8 @@ public class ActiveListDetailsActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mActiveListItemAdapter.cleanup();
+        mActiveListRef.removeEventListener(mActiveListRefListener);
     }
 
     /**
